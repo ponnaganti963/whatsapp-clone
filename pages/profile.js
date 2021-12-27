@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {useRouter} from "next/router";
+import Router from "next/router";
 import {auth,db} from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {Button} from '@mui/material';
@@ -8,7 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 
 function profile() {
-    const router = useRouter();
+    // const router = useRouter();
     const [user] = useAuthState(auth);
     console.log(user)
 
@@ -16,7 +16,7 @@ function profile() {
         <div>
             <Container>
                 <Header>
-                    <ArrowIcon onClick={ () => router.push('/')}></ArrowIcon>
+                    <ArrowIcon onClick={ () => Router.push('/')}></ArrowIcon>
                     <Heading>Profile</Heading>
                 </Header>
                 <Avatar 
