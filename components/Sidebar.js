@@ -8,10 +8,24 @@ import {useCollection } from "react-firebase-hooks/firestore";
 import { auth ,db} from '../firebase';
 import Chat from "../components/Chat";
 import AddIcon from '@mui/icons-material/Add';
+import {useRouter} from 'next/router';
+import getRecipientEmail from "../Utils/getRecipientEmail";
+import {useEffect, useState} from "react";
+
 function Sidebar() {
     const [user] = useAuthState(auth);
+    const router = useRouter();
+    const [chats,setChats] = useState([]);
     const userChatRef = db.collection('chats').where('users','array-contains',user.email);
     const [chatsSnapshots] = useCollection(userChatRef);
+    
+    // useEffect(() => {
+    //     console.log(chatsSnapshots)
+    //     setChats(chatsSnapshots);
+    //     console.log(chats)
+    
+    // }, [])
+
     const createChat = () =>{
         const input = prompt("Please Enter for the user you wish to chat");
         if(!input) return null;
@@ -22,24 +36,33 @@ function Sidebar() {
             })
         }
     };
+
     const chatAlreadyExists = (recipientEmail) => 
         !!chatsSnapshots?.docs.find(
             chat => chat.data().users.find(
                 user => user === recipientEmail)?.length > 0
         );
+
     
+    
+    const filterusers = (e) =>{
+        let filterchats = chatsSnapshots?.docs.filter(doc => 
+            getRecipientEmail(doc.data().users, user).split('@')[0].includes(e.target.value))
+            setChats(filterchats);
+
+    }
 
     return (
         <Container>
             <Header>
-                <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
+                <UserAvatar src={user.photoURL} />
 
                 <IconsContainer>
                     <IconButton onClick={createChat}>
                         <AddIcon />
                     </IconButton>
                     
-                    <IconButton>
+                    <IconButton onClick={() => router.push('/profile')}>
                     <MoreVertIcon />
                     </IconButton>
                     
@@ -47,12 +70,22 @@ function Sidebar() {
             </Header>
             <Search>
                 <SearchIcon/>
-                <SearchInput placeholder="Search in chat" />
+                <SearchInput placeholder="Search in chat" onChange={filterusers}/>
             </Search>
             {
+                !document.querySelector('input')?.value ?
+
                 chatsSnapshots?.docs.map((chat) => (
                     <Chat key={chat.id} id={chat.id} users={chat.data().users} /> 
                 ))
+                :  
+
+                (
+                    chats.map(chat => (
+                        <Chat key={chat.id} id={chat.id} users={chat.data().users} /> 
+                    ))
+                )
+               
             }
         </Container>
     )
@@ -107,6 +140,7 @@ const SearchInput = styled.input`
     outline-width: 0;
     border: none;
     flex: 1;
+    padding-left: 10px;
 `;
 
 

@@ -5,8 +5,10 @@ import moment from 'moment';
 function Message({user, message}) {
     const [userLoggedIn] = useAuthState(auth);
     const TypeOfMessage = user === userLoggedIn.email ? Sender : Reciever;
+    
     return (
         <Container>
+
             <TypeOfMessage>{message.message}
             <TimeStamp>
             {
@@ -21,6 +23,10 @@ function Message({user, message}) {
 export default Message;
 
 const Container = styled.div``;
+
+const DATE = styled.p`
+    color: white;
+`;
 
 const SingleMessage = styled.p`
     width: fit-content;

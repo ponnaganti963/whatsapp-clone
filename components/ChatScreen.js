@@ -10,7 +10,7 @@ import Message from "./Message";
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import MicNoneIcon from '@mui/icons-material/MicNone';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { useState, useRef } from "react";
+import { useState, useRef ,useEffect } from "react";
 import firebase from "firebase";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
@@ -28,6 +28,7 @@ function ChatScreen({chat, messages}) {
         .where("email", "==" , getRecipientEmail(chat.users,user))  
     );
 
+
     const showMessages = () =>{
         if(messageSnapshot){
             return messageSnapshot.docs.map(message => (
@@ -36,7 +37,7 @@ function ChatScreen({chat, messages}) {
                     user={message.data().user}
                     message={{
                         ...message.data(),
-                        timestamp: message.data().timestamp?.toDate().getTime(),
+                        timestamp: message.data().timestamp?.toDate(),
                     }}
                 />
             ))
@@ -77,6 +78,11 @@ function ChatScreen({chat, messages}) {
         setInput('');
         ScrollToBottom();
     };
+
+    
+    useEffect(() => {
+        ScrollToBottom();
+    }, [input]);
 
     const recipient = recipientSnapshot?.docs?.[0]?.data();
     const recipientEmail = getRecipientEmail(chat.users,user);
@@ -205,14 +211,13 @@ const MessageContainer = styled.div`
 
     @media (max-width: 750px){
         padding: 15px;
-        min-height: 80vh;
     }
 
 `;
 
 
 const EndOfMessages = styled.div`
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 `;
 
 const InputContainer = styled.form`
