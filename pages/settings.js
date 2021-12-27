@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useRouter} from "next/router";
-import {auth,db} from "../firebase";
 
 function settings() {
 

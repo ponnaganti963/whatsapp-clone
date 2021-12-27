@@ -8,11 +8,8 @@ import {useCollection } from "react-firebase-hooks/firestore";
 import { auth ,db} from '../firebase';
 import Chat from "../components/Chat";
 import AddIcon from '@mui/icons-material/Add';
-import {useRouter} from  'next/router';
-
 function Sidebar() {
     const [user] = useAuthState(auth);
-    const router = useRouter();
     const userChatRef = db.collection('chats').where('users','array-contains',user.email);
     const [chatsSnapshots] = useCollection(userChatRef);
     const createChat = () =>{
@@ -42,7 +39,7 @@ function Sidebar() {
                         <AddIcon />
                     </IconButton>
                     
-                    <IconButton onClick={() => router.push('/settings')}>
+                    <IconButton>
                     <MoreVertIcon />
                     </IconButton>
                     
