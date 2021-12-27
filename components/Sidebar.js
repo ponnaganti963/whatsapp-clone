@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import {Avatar , IconButton, Button} from "@mui/material";
-import ChatIcon from '@mui/icons-material/Chat';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SearchIcon from '@mui/icons-material/Search';
 import * as EmailValidator from "email-validator";
@@ -8,9 +7,12 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {useCollection } from "react-firebase-hooks/firestore";
 import { auth ,db} from '../firebase';
 import Chat from "../components/Chat";
+import AddIcon from '@mui/icons-material/Add';
+import {useRouter} from  'next/router';
 
 function Sidebar() {
     const [user] = useAuthState(auth);
+    const router = useRouter();
     const userChatRef = db.collection('chats').where('users','array-contains',user.email);
     const [chatsSnapshots] = useCollection(userChatRef);
     const createChat = () =>{
@@ -36,11 +38,11 @@ function Sidebar() {
                 <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
 
                 <IconsContainer>
-                    <IconButton>
-                    <ChatIcon />
+                    <IconButton onClick={createChat}>
+                        <AddIcon />
                     </IconButton>
                     
-                    <IconButton>
+                    <IconButton onClick={() => router.push('/settings')}>
                     <MoreVertIcon />
                     </IconButton>
                     
@@ -50,7 +52,6 @@ function Sidebar() {
                 <SearchIcon/>
                 <SearchInput placeholder="Search in chat" />
             </Search>
-            <SidebarButton onClick={createChat}>Start a new chat</SidebarButton>
             {
                 chatsSnapshots?.docs.map((chat) => (
                     <Chat key={chat.id} id={chat.id} users={chat.data().users} /> 
@@ -76,6 +77,11 @@ const Container = styled.div`
 
     -ms-overflow-style: none;
     scrollbar-width: none;
+
+    @media (max-width: 750px){
+        width: 500px;
+        min-width: 100%;
+    }
 `;
 
 const Header = styled.div`
@@ -87,7 +93,7 @@ const Header = styled.div`
     justify-content: space-between;
     height: 60px;
     align-items: center;
-    border-bottom: 1px solid whitesmoke;
+    border-bottom: 2.5px solid whitesmoke;
     padding: 15px;
 
 `;
@@ -106,14 +112,6 @@ const SearchInput = styled.input`
     flex: 1;
 `;
 
-const SidebarButton =  styled(Button)`
-    width: 100%; 
-    &&&{ //increse the specificity s
-        border-top: 1px solid whitesmoke;
-        border-bottom: 1px solid whitesmoke;
-    }
-
-`;
 
 const UserAvatar = styled(Avatar)`
     cursor: pointer;

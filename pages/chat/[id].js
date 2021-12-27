@@ -13,7 +13,9 @@ function Chat({chat , messages}) {
             <Head>
                 <title>Chat with {getRecipientEmail(chat.users,user)}</title>
             </Head>
-            <Sidebar />
+            <SideBar>
+                <Sidebar />
+            </SideBar>
             <ChatContainter>
                 <ChatScreen chat={chat} messages={messages}/>
             </ChatContainter>
@@ -55,6 +57,13 @@ export async function getServerSideProps(context) {
 
 const Container = styled.div`
     display: flex;
+`;
+
+const SideBar = styled.div`
+        
+        @media (max-width: 750px){
+            display: none;
+        }
 `;
 
 const ChatContainter = styled.div`

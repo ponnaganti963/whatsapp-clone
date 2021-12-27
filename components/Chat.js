@@ -49,8 +49,7 @@ const UserAvatar = styled(Avatar)`
 `;
 
 const RecipientEmail = styled.p`
-text-overflow: ellipsis;
-white-space: nowrap;
-overflow: hidden;
-max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 `;

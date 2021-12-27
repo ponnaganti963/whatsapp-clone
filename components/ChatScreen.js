@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {auth,db} from '../firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import {useRouter} from 'next/router';
-import {Avatar , IconButton, Button} from "@mui/material";
+import {Avatar , IconButton} from "@mui/material";
 import getRecipientEmail from "../Utils/getRecipientEmail";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useCollection} from 'react-firebase-hooks/firestore';
@@ -12,6 +12,8 @@ import MicNoneIcon from '@mui/icons-material/MicNone';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { useState, useRef } from "react";
 import firebase from "firebase";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SendIcon from '@mui/icons-material/Send';
 import TimeAgo from "timeago-react";
 
 function ChatScreen({chat, messages}) {
@@ -81,6 +83,9 @@ function ChatScreen({chat, messages}) {
     return (
         <Container>
             <Header>
+                <ArrowIcon onClick={ () => router.push('/')}>
+
+                </ArrowIcon>
             {
                 recipient ? (
                     <Avatar src={recipient?.photoURL}/>
@@ -107,10 +112,9 @@ function ChatScreen({chat, messages}) {
                         )
                     }
                 </HeaderInformation>
-                <HeaderIcon>
-
+                <IconButton>
                     <MoreVertIcon/>
-                </HeaderIcon>
+                </IconButton>
             </Header>
             <MessageContainer>
                 {showMessages()}
@@ -120,8 +124,14 @@ function ChatScreen({chat, messages}) {
                 <InsertEmoticonIcon />
                 <AttachFileIconBlock />
                 <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)}/>
-                <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send message</button>
-                <MicNoneIcon />
+                {
+                    input ?
+                    (<Button style={{display: !input}}  type="submit" onClick={sendMessage}><SendIcon /></Button>)
+                    :
+                    (<MicNoneIcon />)
+                }
+                
+                
             </InputContainer>
             
         </Container>
@@ -149,29 +159,53 @@ const Header = styled.div`
     border-bottom: 1px solid whitesmoke;
 `;
 
+const ArrowIcon = styled(ArrowBackIcon)`
+    margin-right: 5px ;
+    @media (min-width: 750px){
+        display: none !important;
+    }
+`;
+
+const Button = styled.button`
+    border: none !important ;
+    background-color: white;
+`;
+
 const HeaderInformation = styled.div`
     margin-left: 15px;
     flex: 1;
 
     >h3{
-        margin-bottom: 3px;
         margin-top: 10px;
+        margin-bottom: 0;
     }
 
     >p{
         font-size: 14px;
         color: grey;
-        margin: -5px auto;
+        margin: 0;
+    }
+
+    @media (max-width: 750px){
+        >h3{
+            max-width: 180px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
     }
 `;
 
-const HeaderIcon = styled.div``;
 
 const MessageContainer = styled.div`
     padding: 30px;
     background: url('https://wallpaperaccess.com/full/2224368.png');
     background-size: cover;
     min-height: 90vh;
+
+    @media (max-width: 750px){
+        padding: 15px;
+    }
 
 `;
 
