@@ -205,13 +205,14 @@ const MessageContainer = styled.div`
 
     @media (max-width: 750px){
         padding: 15px;
+        min-height: 80vh;
     }
 
 `;
 
 
 const EndOfMessages = styled.div`
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `;
 
 const InputContainer = styled.form`
@@ -233,8 +234,8 @@ const Input = styled.input`
     align-items: center;
     bottom: 0;
     positiony:sticky;
-    background-color: whitesmoke;
+    background-color: #EDEDED;
     margin-left: 15px;
-    margin-right: 15px;
+    margin-right: 5px;
     border-radius: 25px;
 `;
