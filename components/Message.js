@@ -34,6 +34,7 @@ const SingleMessage = styled.p`
     border-radius: 8px;
     margin: 10px;
     min-width:60px;
+    max-width: 75%;
     position: relative;
     text-align: left;
 

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {auth,db} from '../firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import {useRouter} from 'next/router';
-import {Avatar , IconButton} from "@mui/material";
+import {Avatar , IconButton , Menu , MenuItem} from "@mui/material";
 import getRecipientEmail from "../Utils/getRecipientEmail";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useCollection} from 'react-firebase-hooks/firestore';
@@ -27,7 +27,7 @@ function ChatScreen({chat, messages}) {
         .collection('users')
         .where("email", "==" , getRecipientEmail(chat.users,user))  
     );
-
+    const ITEM_HEIGHT = 48;
 
     const showMessages = () =>{
         if(messageSnapshot){
@@ -68,6 +68,12 @@ function ChatScreen({chat, messages}) {
         {merge: true}
         );
 
+        db.collection('chats').doc(router.query.id)?.set({
+            lastseen: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+        {merge: true}
+        );
+
         db.collection('chats').doc(router.query.id).collection('messages').add({
             timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
             message: input,
@@ -81,8 +87,29 @@ function ChatScreen({chat, messages}) {
 
     
     useEffect(() => {
+        console.log(db.collection('chats').doc(router.query.id).users)
+        if(db.collection('chats').doc(router.query.id).users) {router.push('/');}
         ScrollToBottom();
     }, [input]);
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const deleteChat = () =>{
+        db.collection('chats').doc(router.query.id)?.delete();
+        db.collection('chats').doc(router.query.id)?.collection('messages').onSnapshot(ref =>{
+            ref.docs.forEach(doc=>{
+                db.collection('chats').doc(router.query.id)?.collection('messages').doc(doc.id).delete();
+            })
+        });
+        router.push('/');
+    }
 
     const recipient = recipientSnapshot?.docs?.[0]?.data();
     const recipientEmail = getRecipientEmail(chat.users,user);
@@ -118,9 +145,36 @@ function ChatScreen({chat, messages}) {
                         )
                     }
                 </HeaderInformation>
-                <IconButton>
+                <IconButton
+                    aria-label="more"
+                    id="long-button"
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                >
                     <MoreVertIcon/>
                 </IconButton>
+                <Menu
+                        id="long-menu"
+                        MenuListProps={{
+                        'aria-labelledby': 'long-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: '20ch',
+                        },
+                        }}
+                    >
+                        <MenuItem key='Delete' onClick={deleteChat} >
+                            Delete Chat
+                        </MenuItem>
+                     
+                    </Menu>
             </Header>
             <MessageContainer>
                 {showMessages()}
@@ -210,7 +264,7 @@ const MessageContainer = styled.div`
     min-height: 90vh;
 
     @media (max-width: 750px){
-        padding: 15px;
+        padding: 45px 15px;
     }
 
 `;
@@ -238,7 +292,7 @@ const Input = styled.input`
     border: none;
     align-items: center;
     bottom: 0;
-    positiony:sticky;
+    position:sticky;
     background-color: #EDEDED;
     margin-left: 15px;
     margin-right: 5px;

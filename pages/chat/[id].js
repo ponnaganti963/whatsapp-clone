@@ -41,11 +41,11 @@ export async function getServerSideProps(context) {
         ...messages,
         timestamp : messages.timestamp.toDate().getTime(),
     }));
-
     const chatRes = await ref.get();
     const chat = {
         id: chatRes.id,
-        ...chatRes.data()
+        users: chatRes?.data()?.users,
+        lastseen: chatRes?.data()?.lastseen.toDate().getTime(),
     }
     return { 
         props: {
