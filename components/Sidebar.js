@@ -62,7 +62,7 @@ function Sidebar() {
     return (
         <Container>
             <Header>
-                <UserAvatar src={user.photoURL} />
+                <UserAvatar src={user.photoURL} onClick={() => router.push('/profile')}/>
 
                 <IconsContainer>
                     <IconButton onClick={createChat}>

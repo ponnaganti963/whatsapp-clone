@@ -15,13 +15,19 @@ import firebase from "firebase";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SendIcon from '@mui/icons-material/Send';
 import TimeAgo from "timeago-react";
+import Userprofile from "./Userprofile";
+import CloseIcon from '@mui/icons-material/Close';
 
 function ChatScreen({chat, messages}) {
     const [user] = useAuthState(auth);
     const [input, setInput] = useState('');
+    const [show,setShow] = useState(false);
     const endOfMessagesRef =useRef(null);
+    const ref1 = useRef(null);
+    const ref2 = useRef(null);
     const router = useRouter();
     const [messageSnapshot] = useCollection(db.collection('chats').doc(router.query.id).collection('messages').orderBy('timestamp','asc'));
+
     const [recipientSnapshot] = useCollection(
         db
         .collection('users')
@@ -59,6 +65,21 @@ function ChatScreen({chat, messages}) {
         })
     }
 
+    useEffect(() => {
+        console.log('dasdf',window.innerWidth);
+        if(window.innerWidth <= '900'){
+            console.log(window.innerWidth);
+        if(show === true) {
+            console.log('truw');
+            ref1.current.style.display = "none";
+        }else{
+            console.log('false');
+            ref1.current.style.display = "block";
+        }
+    }
+    },[show])
+
+
     const sendMessage = (e) =>{
         e.preventDefault();
         //update last seen
@@ -87,8 +108,7 @@ function ChatScreen({chat, messages}) {
 
     
     useEffect(() => {
-        console.log(db.collection('chats').doc(router.query.id).users)
-        if(db.collection('chats').doc(router.query.id).users) {router.push('/');}
+        if(db.collection('chats').doc(router.query.id)?.users) {router.push('/');}
         ScrollToBottom();
     }, [input]);
 
@@ -112,87 +132,117 @@ function ChatScreen({chat, messages}) {
     }
 
     const recipient = recipientSnapshot?.docs?.[0]?.data();
+    // console.log(recipientSnapshot);
     const recipientEmail = getRecipientEmail(chat.users,user);
+    
+
     return (
         <Container>
-            <Header>
-                <ArrowIcon onClick={ () => router.push('/')}>
+            <ChatScreenWrapper>
+                <Leftpart ref={ref1}>
+                    <Header>
+                        <ArrowIcon onClick={ () => router.push('/')}>
 
-                </ArrowIcon>
-            {
-                recipient ? (
-                    <Avatar src={recipient?.photoURL}/>
-                ) : (
-                    <Avatar>{recipientEmail[0]}</Avatar>
-                )
-            }
-           
-                <HeaderInformation>
-                    <h3>{getRecipientEmail(chat.users,user)}</h3>
-                    {
-                        recipientSnapshot ?
-                        (
-                           <p>Last seen {"  "}
-                               {
-                                   recipient?.lastseen?.toDate() ? (
-                                       <TimeAgo datetime={recipient.lastseen?.toDate()} />
-                                   ) : "Unavilable"
-                               }
+                        </ArrowIcon>
+                        <AvatarDiv onClick={ () => setShow(!show)}>
+                            {
+                                recipient ? (
+                                    <Avatar src={recipient?.photoURL}/>
+                                ) : (
+                                    <Avatar>{recipientEmail[0]}</Avatar>
+                                )
+                            }
 
-                           </p> 
-                        ): (
-                            <p>Loading Last active ....</p>
-                        )
-                    }
-                </HeaderInformation>
-                <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                >
-                    <MoreVertIcon/>
-                </IconButton>
-                <Menu
-                        id="long-menu"
-                        MenuListProps={{
-                        'aria-labelledby': 'long-button',
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        PaperProps={{
-                        style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: '20ch',
-                        },
-                        }}
-                    >
-                        <MenuItem key='Delete' onClick={deleteChat} >
-                            Delete Chat
-                        </MenuItem>
-                     
-                    </Menu>
-            </Header>
-            <MessageContainer>
-                {showMessages()}
-                <EndOfMessages ref={endOfMessagesRef}/>
-            </MessageContainer>
-            <InputContainer>
-                <InsertEmoticonIcon />
-                <AttachFileIconBlock />
-                <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)}/>
+                        </AvatarDiv>
+                    
+                
+                        <HeaderInformation>
+                            <h3>{getRecipientEmail(chat.users,user)}</h3>
+                            {
+                                recipientSnapshot ?
+                                (
+                                <p>Last seen {"  "}
+                                    {
+                                        recipient?.lastseen?.toDate() ? (
+                                            <TimeAgo datetime={recipient.lastseen?.toDate()} />
+                                        ) : "Unavilable"
+                                    }
+
+                                </p> 
+                                ): (
+                                    <p>Loading Last active ....</p>
+                                )
+                            }
+                        </HeaderInformation>
+                        <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? 'long-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                        >
+                            <MoreVertIcon/>
+                        </IconButton>
+                        <Menu
+                                id="long-menu"
+                                MenuListProps={{
+                                'aria-labelledby': 'long-button',
+                                }}
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                PaperProps={{
+                                style: {
+                                    maxHeight: ITEM_HEIGHT * 4.5,
+                                    width: '20ch',
+                                },
+                                }}
+                            >
+                                <MenuItem key='Info' onClick={() => setShow(true)} >
+                                    Contact Info
+                                </MenuItem>
+                            
+                                <MenuItem key='Delete' onClick={deleteChat} >
+                                    Delete Chat
+                                </MenuItem>
+                            
+                            </Menu>
+                    </Header>
+                    <MessageContainer>
+                        {showMessages()}
+                        <EndOfMessages ref={endOfMessagesRef}/>
+                    </MessageContainer>
+                    <InputContainer>
+                        <InsertEmoticonIcon />
+                        <AttachFileIconBlock />
+                        <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)}/>
+                        {
+                            input ?
+                            (<Button style={{display: !input}}  type="submit" onClick={sendMessage}><SendIcon /></Button>)
+                            :
+                            (<MicNoneIcon />)
+                        }
+                        
+                        
+                    </InputContainer>
+                </Leftpart>
                 {
-                    input ?
-                    (<Button style={{display: !input}}  type="submit" onClick={sendMessage}><SendIcon /></Button>)
-                    :
-                    (<MicNoneIcon />)
+                    show && (
+                        <RightPart ref={ref2}>
+                            <RightPartHeader>
+                                <CloseIconblock onClick={() => setShow(false)} />
+                                <Heading>Contact Info</Heading>
+                            </RightPartHeader>
+                            
+                            <Userprofile phtoturl ={recipient?.photoURL} email ={recipientEmail}/>
+                        </RightPart>
+                    )
                 }
+            
                 
-                
-            </InputContainer>
+            </ChatScreenWrapper>
+            
             
         </Container>
     )
@@ -205,7 +255,40 @@ const AttachFileIconBlock = styled(AttachFileIcon)`
     transform : rotate(-45deg);
 `;
 
-const Container = styled.div``;
+const RightPartHeader = styled.div`
+    margin-left: 20px;
+    display: flex;
+    align-items : center;
+    position: fixed;
+`;
+const CloseIconblock = styled(CloseIcon)``;
+
+const Container = styled.div`
+    display: relative;
+`;
+
+const ChatScreenWrapper = styled.div`
+    display: flex;
+    transition: all 1s linear;
+`;
+
+
+const Leftpart = styled.div`
+    flex: 1;
+    
+`;
+
+const RightPart = styled.div`
+    width: 25vw;
+    height: 100vh;
+    border-left: 1px solid whitesmoke;
+
+`;
+
+const Heading = styled.h3`
+    display: inline-block;
+    margin-left: 10px;
+`;
 
 const Header = styled.div`
     position: sticky;
@@ -217,6 +300,10 @@ const Header = styled.div`
     height: 60px;
     align-items: center;
     border-bottom: 1px solid whitesmoke;
+`;
+
+const AvatarDiv = styled.div`
+    cursor:  pointer;
 `;
 
 const ArrowIcon = styled(ArrowBackIcon)`
