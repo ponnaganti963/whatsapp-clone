@@ -15,6 +15,7 @@ function Chat({id, users}) {
     const enterChat = () => {
         router.push(`/chat/${id}`);
     }
+    console.log(recipient);
     return (
         <Container>
             {
@@ -27,7 +28,7 @@ function Chat({id, users}) {
 
             <EmailWrapper>
           
-            <RecipientEmail onClick={enterChat}>{recipientEmail}</RecipientEmail>
+            <RecipientEmail onClick={enterChat}>{recipient?.displayName}</RecipientEmail>
             </EmailWrapper>
  
           

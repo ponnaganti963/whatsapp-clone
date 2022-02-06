@@ -35,6 +35,7 @@ function ChatScreen({chat, messages}) {
     );
     const ITEM_HEIGHT = 48;
 
+
     const showMessages = () =>{
         if(messageSnapshot){
             return messageSnapshot.docs.map(message => (
@@ -66,14 +67,10 @@ function ChatScreen({chat, messages}) {
     }
 
     useEffect(() => {
-        console.log('dasdf',window.innerWidth);
         if(window.innerWidth <= '900'){
-            console.log(window.innerWidth);
         if(show === true) {
-            console.log('truw');
             ref1.current.style.display = "none";
         }else{
-            console.log('false');
             ref1.current.style.display = "block";
         }
     }
@@ -132,7 +129,6 @@ function ChatScreen({chat, messages}) {
     }
 
     const recipient = recipientSnapshot?.docs?.[0]?.data();
-    // console.log(recipientSnapshot);
     const recipientEmail = getRecipientEmail(chat.users,user);
     
 
@@ -141,10 +137,12 @@ function ChatScreen({chat, messages}) {
             <ChatScreenWrapper>
                 <Leftpart ref={ref1}>
                     <Header>
-                        <ArrowIcon onClick={ () => router.push('/')}>
-
-                        </ArrowIcon>
-                        <AvatarDiv onClick={ () => setShow(!show)}>
+                        <IconButton>
+                            <ArrowIcon onClick={ () => router.push('/')}>
+                            </ArrowIcon>
+                        </IconButton>
+                        
+                        <AvatarDiv>
                             {
                                 recipient ? (
                                     <Avatar src={recipient?.photoURL}/>
@@ -156,8 +154,8 @@ function ChatScreen({chat, messages}) {
                         </AvatarDiv>
                     
                 
-                        <HeaderInformation>
-                            <h3>{getRecipientEmail(chat.users,user)}</h3>
+                        <HeaderInformation onClick={ () => setShow(!show)}>
+                            <h3>{recipient?.displayName}</h3>
                             {
                                 recipientSnapshot ?
                                 (
@@ -199,7 +197,7 @@ function ChatScreen({chat, messages}) {
                                 },
                                 }}
                             >
-                                <MenuItem key='Info' onClick={() => setShow(true)} >
+                                <MenuItem key='Info' onClick={() => {setShow(true); handleClose();}} >
                                     Contact Info
                                 </MenuItem>
                             
@@ -231,11 +229,12 @@ function ChatScreen({chat, messages}) {
                     show && (
                         <RightPart ref={ref2}>
                             <RightPartHeader>
-                                <CloseIconblock onClick={() => setShow(false)} />
+                                <IconButton><CloseIconblock onClick={() => setShow(false)} /></IconButton>
+                                
                                 <Heading>Contact Info</Heading>
                             </RightPartHeader>
                             
-                            <Userprofile phtoturl ={recipient?.photoURL} email ={recipientEmail}/>
+                            <Userprofile phtoturl ={recipient?.photoURL} email ={recipientEmail} name = {recipient?.displayName}/>
                         </RightPart>
                     )
                 }
@@ -282,6 +281,9 @@ const RightPart = styled.div`
     width: 25vw;
     height: 100vh;
     border-left: 1px solid whitesmoke;
+    @media (max-width: 900px){
+        width: 100vw;
+    }
 
 `;
 
@@ -321,6 +323,11 @@ const Button = styled.button`
 const HeaderInformation = styled.div`
     margin-left: 15px;
     flex: 1;
+    cursor:  pointer;
+    padding: 0 5px;
+    :hover{
+        background-color: #efeaea;
+    }
 
     >h3{
         margin-top: 10px;
@@ -334,6 +341,7 @@ const HeaderInformation = styled.div`
     }
 
     @media (max-width: 750px){
+        margin-left: 10px;
         >h3{
             max-width: 180px;
             text-overflow: ellipsis;

@@ -9,12 +9,18 @@ import firebase from 'firebase';
 function MyApp({ Component, pageProps }) {
   const [user, loading] = useAuthState(auth);
 
+
+
   useEffect(() => {
     if(user){
+      if (user.displayName === null){
+        auth.currentUser.updateProfile({ displayName: localStorage.getItem('displayName')})
+      }
       db.collection('users').doc(user.uid).set({
         email: user.email,
         lastseen: firebase.firestore.FieldValue.serverTimestamp(),
         photoURL: user.photoURL,
+        displayName: user.displayName == null ? localStorage.getItem('displayName') : user.displayName,
       },
       {merge: true});
     }

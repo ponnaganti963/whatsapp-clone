@@ -4,12 +4,18 @@ import Router from "next/router";
 import {auth} from "../firebase";
 import {Button} from '@mui/material';
 import ProfileContainer from "../components/ProfileContainer";
+import Head from "next/head";
 
 function profile() {
     // const router = useRouter();
     console.log(auth);
     return (
         <div>
+            <Head>
+                <title>Profile</title>
+                <meta name="description" content="Profile Page" />
+                <link rel="icon" href="/whatsappimg.png" />
+            </Head>
             <Container>
                 <Header>
                     <ArrowIcon onClick={ () => Router.push('/')}></ArrowIcon>
