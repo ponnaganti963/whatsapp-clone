@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import { Circle } from "better-react-spinkit";
 function Loading() {
     return (
         <div style={{ display: "grid", placeItems: "center", height: "100vh"}}>
@@ -10,8 +9,6 @@ function Loading() {
                 style = {{marginBottom: 10}}
                 height ={200}
                 />
-                {/* <Circle color="#3cbc2b" size={60}/> */}
-
         </div>
     )
 }
