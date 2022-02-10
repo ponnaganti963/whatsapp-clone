@@ -17,6 +17,9 @@ import SendIcon from '@mui/icons-material/Send';
 import TimeAgo from "timeago-react";
 import Userprofile from "./Userprofile";
 import CloseIcon from '@mui/icons-material/Close';
+import dynamic from 'next/dynamic';
+
+// import Picker from 'emoji-picker-react';
 
 function ChatScreen({chat, messages}) {
     const [user] = useAuthState(auth);
@@ -26,6 +29,7 @@ function ChatScreen({chat, messages}) {
     const ref1 = useRef(null);
     const ref2 = useRef(null);
     const router = useRouter();
+    const [openEmoji,setOpenEmoji] = useState(false);
     const [messageSnapshot] = useCollection(db.collection('chats').doc(router.query.id).collection('messages').orderBy('timestamp','asc'));
 
     const [recipientSnapshot] = useCollection(
@@ -34,7 +38,7 @@ function ChatScreen({chat, messages}) {
         .where("email", "==" , getRecipientEmail(chat.users,user))  
     );
     const ITEM_HEIGHT = 48;
-
+    const Picker = dynamic(() => import('emoji-picker-react'), {ssr: false});
 
     const showMessages = () =>{
         if(messageSnapshot){
@@ -88,6 +92,7 @@ function ChatScreen({chat, messages}) {
 
         db.collection('chats').doc(router.query.id)?.set({
             lastseen: firebase.firestore.FieldValue.serverTimestamp(),
+            lastmessage: input
         },
         {merge: true}
         );
@@ -126,6 +131,10 @@ function ChatScreen({chat, messages}) {
             })
         });
         router.push('/');
+    }
+
+    const onemojiclick = (e, emojiObject) => {
+        setInput(input+emojiObject.emoji);
     }
 
     const recipient = recipientSnapshot?.docs?.[0]?.data();
@@ -211,8 +220,11 @@ function ChatScreen({chat, messages}) {
                         {showMessages()}
                         <EndOfMessages ref={endOfMessagesRef}/>
                     </MessageContainer>
+
                     <InputContainer>
-                        <InsertEmoticonIcon style={{color: '#8696a0'}}/>
+                        { openEmoji && <PickerContainer><Picker onEmojiClick={onemojiclick}  pickerStyle={{width: '100%'}} disableAutoFocus/></PickerContainer> }
+                        <InputWrapper>
+                        <InsertEmoticonIcon style={{color: '#8696a0'}} onClick={() => setOpenEmoji(!openEmoji)}/>
                         <AttachFileIconBlock />
                         <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)} autoFocus/>
                         {
@@ -221,7 +233,7 @@ function ChatScreen({chat, messages}) {
                             :
                             (<MicNoneIconWrap></MicNoneIconWrap>)
                         }
-                        
+                        </InputWrapper>
                         
                     </InputContainer>
                 </Leftpart>
@@ -391,6 +403,7 @@ const EndOfMessages = styled.div`
 const InputContainer = styled.form`
     display: flex;
     align-items: center;
+    flex-direction: column;
     padding: 10px;
     position: sticky;
     bottom: 0;
@@ -417,4 +430,15 @@ const Input = styled.input`
     ::placeholder{
         color: #8696a0;
     }
+`;
+
+const PickerContainer = styled.div`
+    margin-bottom: 20px;
+`;
+
+const InputWrapper = styled.div`
+display: flex;
+flex: 1;
+width: 100%; 
+
 `;

@@ -22,20 +22,37 @@ function Sidebar() {
     const [chats,setChats] = useState([]);
     const userChatRef = db.collection('chats').where('users','array-contains',user.email);
     const [chatsSnapshots] = useCollection(userChatRef);
-    console.log(chatsSnapshots);
     const ITEM_HEIGHT = 48;
+    const userRef = db.collection('users');
+    const [userSnapshots] = useCollection(userRef);
     
     const createChat = () =>{
         const input = prompt("Please Enter for the user you wish to chat");
         if(!input) return null;
-        if(EmailValidator.validate(input) && !chatAlreadyExists(input) && input !== user.email){
-            db.collection('chats').add({
-                users: [user.email, input],
-                lastseen: firebase.firestore.FieldValue.serverTimestamp(),
-            })
+        if(EmailValidator.validate(input) && !chatAlreadyExists(input) && input !== user.email) {
+            if(AccountExists(input)) {
+                db.collection('chats').add({
+                    users: [user.email, input],
+                    lastseen: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+            }else{
+                alert("Account doesn't exists")
+            }
+           console.log(AccountExists(input));
         }
     };
 
+    function AccountExists(input){
+        let found = false;
+        userSnapshots?.forEach(doc => {
+            if (doc.data().email === input) {
+                console.log('aa',new Date().getTime())
+                found = true;
+                
+            }
+        })
+        return found;
+    }
     const chatAlreadyExists = (recipientEmail) => 
         !!chatsSnapshots?.docs.find(
             chat => chat.data().users.find(
@@ -129,7 +146,7 @@ function Sidebar() {
                  chatsSnapshots?.docs.length > 0 ? 
 
                     chatsSnapshots?.docs.map((chat) => (
-                        <Chat key={chat.id} id={chat.id} users={chat.data().users} /> 
+                        <Chat key={chat.id} id={chat.id} users={chat.data().users} users={chat.data().users} lastseen={chat.data()?.lastseen?.toDate().getTime()} lastmessage={chat.data().lastmessage} /> 
                     )):
                     <NoResults>Start a New Chat</NoResults>
                 :  
@@ -137,7 +154,7 @@ function Sidebar() {
 
                     
                     chats.map(chat => (
-                        <Chat key={chat.id} id={chat.id} users={chat.data().users} /> 
+                        <Chat key={chat.id} id={chat.id} users={chat.data().users} lastseen={chat.data()?.lastseen?.toDate().getTime()} lastmessage={chat.data().lastmessage} /> 
                     ))
                     : 
                      <NoResults>No results found</NoResults>       
