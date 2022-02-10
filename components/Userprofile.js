@@ -18,7 +18,8 @@ function Userprofile({ phtoturl ,email, name}) {
 
   return (
       <Container>
-                <Avatar 
+        <ProfileWrapper>
+        <Avatar 
                     src={phtoturl ? phtoturl : 'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png'}>
                 </Avatar>
                 <DetailsDiv>
@@ -31,6 +32,9 @@ function Userprofile({ phtoturl ,email, name}) {
                         </MailTO>
                         
                 </DetailsDiv>
+
+        </ProfileWrapper>
+                
         </Container>
 
     
@@ -41,14 +45,18 @@ export default Userprofile;
 
 
 const Container = styled.div`
-
-  width: 25vw;
-  display: block;
-  margin: 60px auto;
- 
-
-
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+ padding-top: 60px;
 `;
+
+const ProfileWrapper = styled.div`
+  color: white;
+  margin-top: -300px;
+`;
+
 
 const MailTO = styled.a`
   margin: 20px auto 0;
@@ -62,7 +70,7 @@ const MailTO = styled.a`
 const Avatar = styled.img`
     display: block;
     border-radius: 100%;
-    margin: 20px auto;
+    margin: 100px auto 20px;
     width: 200px;
     height: 200px;
 

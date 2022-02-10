@@ -36,18 +36,25 @@ export default profile;
 
 
 const Container = styled.div`
-
+background-color: #111b21;
+height: 100vh;
+    
 `;
 const ArrowIcon = styled(ArrowBackIcon)`
-    margin: 10px;
+    margin: 10px; 
+    color: #8696a0;
 `;
 const Header = styled.div`
     display: flex;
-    border-bottom: 2px solid whitesmoke;
+    height: 60px;
+    align-items: center;
+    background-color: #202c33;
+    border-bottom: 1px solid rgba(134,150,160,0.15);
 `;
 
 const Heading = styled.h2`
-    margin: 5px 20px;
+    margin: 5px 10px;
+    color: white;
 `;
 
 const SignOutButton = styled(Button)`

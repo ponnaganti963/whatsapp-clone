@@ -67,7 +67,7 @@ function ChatScreen({chat, messages}) {
     }
 
     useEffect(() => {
-        if(window.innerWidth <= '900'){
+        if(window.innerWidth <= '1000'){
         if(show === true) {
             ref1.current.style.display = "none";
         }else{
@@ -180,7 +180,7 @@ function ChatScreen({chat, messages}) {
                             aria-haspopup="true"
                             onClick={handleClick}
                         >
-                            <MoreVertIcon/>
+                            <MoreVertIcon style={{color: '#8696a0'}}/>
                         </IconButton>
                         <Menu
                                 id="long-menu"
@@ -212,14 +212,14 @@ function ChatScreen({chat, messages}) {
                         <EndOfMessages ref={endOfMessagesRef}/>
                     </MessageContainer>
                     <InputContainer>
-                        <InsertEmoticonIcon />
+                        <InsertEmoticonIcon style={{color: '#8696a0'}}/>
                         <AttachFileIconBlock />
-                        <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)}/>
+                        <Input placeholder="Type a message" value={input} onChange={e => setInput(e.target.value)} autoFocus/>
                         {
                             input ?
                             (<Button style={{display: !input}}  type="submit" onClick={sendMessage}><SendIcon /></Button>)
                             :
-                            (<MicNoneIcon />)
+                            (<MicNoneIconWrap></MicNoneIconWrap>)
                         }
                         
                         
@@ -229,7 +229,7 @@ function ChatScreen({chat, messages}) {
                     show && (
                         <RightPart ref={ref2}>
                             <RightPartHeader>
-                                <IconButton><CloseIconblock onClick={() => setShow(false)} /></IconButton>
+                                <IconButton onClick={() => setShow(false)}><CloseIconblock  /></IconButton>
                                 
                                 <Heading>Contact Info</Heading>
                             </RightPartHeader>
@@ -252,15 +252,22 @@ export default ChatScreen;
 const AttachFileIconBlock = styled(AttachFileIcon)`
     margin-left: 10px;
     transform : rotate(-45deg);
+    color: #8696a0;
 `;
 
 const RightPartHeader = styled.div`
-    margin-left: 20px;
+    padding-left: 10px;
     display: flex;
     align-items : center;
     position: fixed;
+    top: 0;
+    height: 60px;
+    width: 100%; 
+    background-color: #202c33;
 `;
-const CloseIconblock = styled(CloseIcon)``;
+const CloseIconblock = styled(CloseIcon)`
+ color: #8696a0;
+`;
 
 const Container = styled.div`
     display: relative;
@@ -274,14 +281,20 @@ const ChatScreenWrapper = styled.div`
 
 const Leftpart = styled.div`
     flex: 1;
+    border-right: 0.1px solid #8696a0;;
     
 `;
 
 const RightPart = styled.div`
     width: 25vw;
     height: 100vh;
-    border-left: 1px solid whitesmoke;
-    @media (max-width: 900px){
+
+    position: sticky;
+    top: 0;
+    right: 0;
+    background-color: #111b21;
+    
+    @media (max-width: 1000px){
         width: 100vw;
     }
 
@@ -290,26 +303,26 @@ const RightPart = styled.div`
 const Heading = styled.h3`
     display: inline-block;
     margin-left: 10px;
+    color: white
 `;
 
 const Header = styled.div`
     position: sticky;
-    background-color: white;
+    background-color: #202c33;
     z-index: 100;
     top:0;
     display: flex;
-    padding: 11px;
+    padding: 0 5px;
     height: 60px;
     align-items: center;
-    border-bottom: 1px solid whitesmoke;
+    border-bottom: 0.5px solid rgba(134,150,160,0.15);
 `;
 
-const AvatarDiv = styled.div`
-    cursor:  pointer;
-`;
+const AvatarDiv = styled.div``;
 
 const ArrowIcon = styled(ArrowBackIcon)`
     margin-right: 5px ;
+    color: #8696a0;
     @media (min-width: 750px){
         display: none !important;
     }
@@ -317,21 +330,27 @@ const ArrowIcon = styled(ArrowBackIcon)`
 
 const Button = styled.button`
     border: none !important ;
-    background-color: white;
+    background: transparent !important;
+    color: #8696a0;
+`;
+
+const MicNoneIconWrap = styled(MicNoneIcon)`
+  color: #8696a0;
+  font-size: 25px !important;
+  width: 37px !important;
 `;
 
 const HeaderInformation = styled.div`
     margin-left: 15px;
     flex: 1;
+    height: 100%;
     cursor:  pointer;
     padding: 0 5px;
-    :hover{
-        background-color: #efeaea;
-    }
 
     >h3{
-        margin-top: 10px;
+        margin-top: 7px;
         margin-bottom: 0;
+        color: white;
     }
 
     >p{
@@ -375,7 +394,7 @@ const InputContainer = styled.form`
     padding: 10px;
     position: sticky;
     bottom: 0;
-    background-color: white;
+    background-color: #202c33;
     z-index: 100;
 `;
 
@@ -388,8 +407,14 @@ const Input = styled.input`
     align-items: center;
     bottom: 0;
     position:sticky;
-    background-color: #EDEDED;
+    font-size: 15px;
+    color: #e9edef;
+    background-color: #2a3942;
     margin-left: 15px;
     margin-right: 5px;
-    border-radius: 25px;
+    border-radius: 5px;
+
+    ::placeholder{
+        color: #8696a0;
+    }
 `;

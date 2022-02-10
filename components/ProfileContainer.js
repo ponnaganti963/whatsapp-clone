@@ -20,13 +20,13 @@ function ProfileContainer() {
                 
                 <DetailsDiv>
                     <Card>
-                        <PersonIcon />
+                        <PersonIcon style={{color: '#8696a0'}}/>
                         <Details>
                         <h5>Name</h5>
                         {
                             toggle ?
                             <InputName value={editname} onChange={(e) => setEditname(e.target.value)} />:
-                            <h4>{editname}</h4>
+                            <h3>{editname}</h3>
 
                         
                         }
@@ -52,9 +52,9 @@ function ProfileContainer() {
                             }}>
                             {
                             toggle ?
-                            <SaveIcon/> 
+                            <SaveIcon style={{color: '#8696a0'}}/> 
                             :
-                            <EditIcon/>
+                            <EditIcon style={{color: '#8696a0'}}/>
                             }
                             
                             
@@ -62,7 +62,7 @@ function ProfileContainer() {
                     </Card>
                     
                     <Card>
-                        <EmailIcon />
+                        <EmailIcon style={{color: '#8696a0'}}/>
                         <Details>
                         <h5>Email</h5>
                         <h3>{user?.email}</h3>
@@ -89,9 +89,11 @@ const InputName = styled.input`
     border-left: none;
     border-right: none;
     border-bottom: 1px solid black;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: bold;
     outline: none;
+    background:transparent;
+    color:  white;
    
 `;
 
@@ -115,6 +117,7 @@ const IconButtonWrap = styled(IconButton)`
     position: absolute !important;
     top: 10px;
     right: 0;
+    
 `;
 
 const DetailsDiv = styled.div`
@@ -128,7 +131,7 @@ const DetailsDiv = styled.div`
 
 const Card = styled.div`
     display: flex;
-    border-bottom: 2px solid whitesmoke;
+    border-bottom: 1px solid rgba(134,150,160,0.15);
     position: relative;
     padding: 10px;
 `;
@@ -137,13 +140,16 @@ const Details = styled.div`
     margin-left: 20px;
 
     >h5{
-        color: rgba(0,0,0,0.5);
+        color: rgba(255,255,255,0.3);
     }
 
+    >h3{
+        color: white;
+    }
     @media (max-width: 750px) {
 
         >h3{
-            font-size: 15px;
+            font-size: 15px
         }
     }
 `;

@@ -40,28 +40,34 @@ export default Chat;
 
 const Container = styled.div`
     display: flex;
+    height: 70px;
     align-items: center;
     cursor: pointer;
-    padding: 0 15px;
-
+    padding: 0 10px;
+    
     :hover{
-        background-color: #e9eaeb;
+        background-color: #2a3942;
     }
 `;
 
 const UserAvatar = styled(Avatar)`
     margin: 5px;
     margin-right: 15px;
+    width: 50px !important;
+    height: 50px !important;
+
 `;
 
 const RecipientEmail = styled.p`
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    color: white;
 
 `;
 
 const EmailWrapper = styled.div`
     flex: 1;
-    border-bottom: 0.1px solid rgb(0,0,0,0.1);
+    padding-bottom: 14px;
+    border-bottom: 0.1px solid rgba(134,150,160,0.15);
 `;

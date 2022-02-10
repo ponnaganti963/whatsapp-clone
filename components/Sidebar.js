@@ -66,7 +66,7 @@ function Sidebar() {
 
                 <IconsContainer>
                     <IconButton onClick={createChat}>
-                        <AddIcon />
+                        <AddIcon style={{color: '#8696a0'}}/>
                     </IconButton>
                     <IconButton 
                         aria-label="more"
@@ -76,8 +76,8 @@ function Sidebar() {
                         aria-haspopup="true"
                         onClick={handleClick}
                     >
-                    <MoreVertIcon />
-                    </IconButton>
+                    <MoreVertIcon style={{color: '#8696a0'}}/>
+                    </IconButton >
                     <Menu
                         id="long-menu"
                         MenuListProps={{
@@ -118,7 +118,7 @@ function Sidebar() {
             </Header>
             <SearchWrapper>
                 <Search>
-                    <SearchIcon/>
+                    <SearchIcon style={{ color: '#8696a0'}}/>
                     <SearchInput placeholder="Search in chat" onChange={filterusers}/>
                 </Search>
             </SearchWrapper>
@@ -151,12 +151,12 @@ export default Sidebar;
 
 const Container = styled.div`
     flex: 0.45;
-    border-right: 1px solid whitesmoke;
+    border-right: 1px solid rgba(134,150,160,0.15);
     height: 100vh;
     min-width: 300px;
     max-width: 350px;
     overflow-y : scroll;
-    background-color: #fff;
+    background-color: #111b21;
     ::-webkit-scrollbar{
         display: none;
     }
@@ -174,30 +174,31 @@ const Header = styled.div`
     display: flex;
     position: sticky;
     top: 0;
-    background-color: white;
+    background-color: #202c33;
     z-index: 1;
     justify-content: space-between;
     height: 60px;
     align-items: center;
-    border-bottom: 2.5px solid whitesmoke;
+    border-bottom: 1px solid rgba(134,150,160,0.15);
     padding: 15px;
 
 `;
 const SearchWrapper = styled.div`
-    border-bottom: 2px solid whitesmoke;
+    border-bottom: 1px solid rgba(134,150,160,0.15);
     position: sticky;
     top: 60px;
-    background-color: white;
+    padding: 8px 0;
+    background-color: #111b21;
     z-index:  100;
 `;
 
 const Search = styled.div`
     display: flex;
     align-items: center;
-    margin: 5px 10px;
+    margin: auto 10px;
     padding: 5px 10px;
-    border-radius: 25px;
-    background-color: #ededed;
+    border-radius: 5px;
+    background-color: #202c33;
 `;
 
 
@@ -208,6 +209,7 @@ const SearchInput = styled.input`
     flex: 1;
     padding-left: 10px;
     background: transparent;
+    color: white;
 `;
 
 
@@ -230,6 +232,7 @@ const NoResults = styled.p`
     color: rgb(0,0,0,0.5);
     text-align: center;
     width: 200px;
+    color: whitesmoke;
 `;
 
 const ListItems = styled.p`
