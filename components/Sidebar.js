@@ -146,7 +146,7 @@ function Sidebar() {
                  chatsSnapshots?.docs.length > 0 ? 
 
                     chatsSnapshots?.docs.map((chat) => (
-                        <Chat key={chat.id} id={chat.id} users={chat.data().users} users={chat.data().users} lastseen={chat.data()?.lastseen?.toDate().getTime()} lastmessage={chat.data().lastmessage} /> 
+                        <Chat key={chat.id} id={chat.id} users={chat.data().users} lastseen={chat.data()?.lastseen?.toDate().getTime()} lastmessage={chat.data().lastmessage} /> 
                     )):
                     <NoResults>Start a New Chat</NoResults>
                 :  
