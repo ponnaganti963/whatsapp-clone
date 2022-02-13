@@ -6,6 +6,7 @@ import {useCollection} from "react-firebase-hooks/firestore";
 import {useAuthState} from "react-firebase-hooks/auth";
 import { useRouter} from "next/router";
 import moment from 'moment';
+import { Suspense } from "react";
 
 function Chat({id, users, lastseen, lastmessage}) {
     const router = useRouter();
@@ -14,10 +15,11 @@ function Chat({id, users, lastseen, lastmessage}) {
     const [recipientSnapshot] = useCollection(db.collection('users').where('email',"==",recipientEmail));
     const recipient = recipientSnapshot?.docs?.[0]?.data();
     const enterChat = () => {
+        console.log('sadfsadf',id);
         router.push(`/chat/${id}`);
     }
     return (
-        <Container>
+        <Container onClick={enterChat}>
             {
                 recipient ? (
                     <UserAvatar src={recipient?.photoURL}/>
@@ -25,12 +27,14 @@ function Chat({id, users, lastseen, lastmessage}) {
                     <UserAvatar>{recipientEmail[0]}</UserAvatar>
                 )
             }
-
-            <EmailWrapper>
-                <RecipientEmail onClick={enterChat}>{recipient?.displayName}</RecipientEmail>
-                { lastmessage && <SpanLastMessage>{lastmessage}</SpanLastMessage> }
-                <Spantime>{lastseen ? moment(lastseen).format('LT') : '...'}</Spantime>
-            </EmailWrapper>
+            <Suspense fallback={`Loading`}>
+                <EmailWrapper>
+                    <RecipientEmail>{recipient?.displayName}</RecipientEmail>
+                    { lastmessage && <SpanLastMessage>{lastmessage}</SpanLastMessage> }
+                    <Spantime>{lastseen ? moment(lastseen).format('LT') : '...'}</Spantime>
+                </EmailWrapper>
+            </Suspense>
+            
  
           
         </Container>
@@ -57,6 +61,7 @@ const UserAvatar = styled(Avatar)`
     width: 50px !important;
     height: 50px !important;
     background-color: #6a7175 !important;
+    object-fit: contain !important;
 
 `;
 
@@ -65,7 +70,14 @@ const RecipientEmail = styled.p`
     white-space: nowrap;
     overflow: hidden;
     color: white;
-    margin: 5px auto 2px;
+    margin: 5px 0 2px;
+    max-width: 200px;
+    @media (max-width: 768px)  and (min-width: 400px)  {
+        max-width: 80%;
+    }
+    @media (max-width: 400px){
+        max-width: 150px;
+    }
 
 `;
 

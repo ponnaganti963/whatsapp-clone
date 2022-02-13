@@ -1,10 +1,13 @@
 import Head from "next/head";
+import dynamic from "next/dynamic";
+import React,{Suspense} from "react";
 import styled from "styled-components";
-import ChatScreen from "../../components/ChatScreen";
+// import ChatScreen from "../../components/ChatScreen";
 import Sidebar from "../../components/Sidebar";
 import {auth, db} from '../../firebase';
 import {useAuthState} from 'react-firebase-hooks/auth';
 import getRecipientEmail from "../../Utils/getRecipientEmail";
+const ChatScreen = dynamic(() => import('../../components/ChatScreen'));
 
 function Chat({chat , messages}) {
     const [user] = useAuthState(auth);
@@ -17,7 +20,7 @@ function Chat({chat , messages}) {
                 <Sidebar />
             </SideBar>
             <ChatContainter>
-                <ChatScreen chat={chat} messages={messages}/>
+                    <ChatScreen chat={chat} messages={messages}/>
             </ChatContainter>
 
         </Container>

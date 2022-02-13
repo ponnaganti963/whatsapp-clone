@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import EmailIcon from '@mui/icons-material/Email';
 import {db} from '../firebase';
+import PhoneIcon from '@mui/icons-material/Phone';
+import Phone from '@mui/icons-material/Phone';
 
 
 function Userprofile({ phtoturl ,email, name}) {
@@ -15,24 +17,32 @@ function Userprofile({ phtoturl ,email, name}) {
       })
     });
   },[email])
+  console.log(user,user.phoneNumber);
 
   return (
       <Container>
         <ProfileWrapper>
-        <Avatar 
-                    src={phtoturl ? phtoturl : 'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png'}>
-                </Avatar>
-                <DetailsDiv>
+            <Avatar 
+              src={phtoturl ? phtoturl : 'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png'}>
+            </Avatar>
+            <DetailsDiv>
+                
+                    <h3>{name}</h3>
+                    <h3>{email}</h3>
+                    { 
+                      user.phoneNumber ? 
+                      <MailTO>
+                      <Phone/>
+                    </MailTO>:
+                    ''
+                    }
                     
-                        <h3>{name}</h3>
-                        <h3>{email}</h3>
-                        <MailTO href={`mailto: ${email}`}> 
-                        <EmailIcon style={{height:'50px',width:'50px'}} />
-                        <p style={{margin:0}}>Email</p>
-                        </MailTO>
-                        
-                </DetailsDiv>
-
+                    <MailTO href={`mailto: ${email}`}> 
+                    <EmailIcon style={{height:'50px',width:'50px'}} />
+                    <p style={{margin:0}}>Email</p>
+                    </MailTO>
+                    
+            </DetailsDiv>
         </ProfileWrapper>
                 
         </Container>
@@ -73,11 +83,13 @@ const Avatar = styled.img`
     margin: 100px auto 20px;
     width: 200px;
     height: 200px;
+    object-fit: contain;
+    
 
 
     @media (max-width:900px) {
-        width: 120px;
-        height: 120px;
+        width: 180px;
+        height: 180px;
     }
 
 `;
@@ -88,9 +100,10 @@ const DetailsDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 10px;
 
     >h3{
-
+      text-align: center;
       margin: 0;
     }
    

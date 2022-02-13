@@ -13,7 +13,7 @@ import Chat from "../components/Chat";
 import AddIcon from '@mui/icons-material/Add';
 import {useRouter} from 'next/router';
 import getRecipientEmail from "../Utils/getRecipientEmail";
-import {useEffect, useState} from "react";
+import React,{useEffect, useState} from "react";
 import firebase from "firebase";
 
 function Sidebar() {
@@ -170,8 +170,8 @@ const Container = styled.div`
     flex: 0.45;
     border-right: 1px solid rgba(134,150,160,0.15);
     height: 100vh;
-    min-width: 300px;
-    max-width: 350px;
+    min-width: 350px;
+    max-width: 400px;
     overflow-y : scroll;
     background-color: #111b21;
     ::-webkit-scrollbar{

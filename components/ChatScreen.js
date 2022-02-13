@@ -146,9 +146,8 @@ function ChatScreen({chat, messages}) {
             <ChatScreenWrapper>
                 <Leftpart ref={ref1}>
                     <Header>
-                        <IconButton>
-                            <ArrowIcon onClick={ () => router.push('/')}>
-                            </ArrowIcon>
+                        <IconButton onClick={ () => router.push('/')}>
+                            <ArrowIcon></ArrowIcon>
                         </IconButton>
                         
                         <AvatarDiv>
@@ -440,5 +439,5 @@ const InputWrapper = styled.div`
 display: flex;
 flex: 1;
 width: 100%; 
-
+align-items: center;
 `;
